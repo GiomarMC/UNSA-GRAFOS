@@ -3,7 +3,7 @@ import pandas as pd
 Lista_Puntaje = []
 Lista_Anio = []
 Lista = []
-datos = pd.read_csv("E:\\TIF_discretas\\IngresantesCC_UNSA.csv")
+datos = pd.read_csv("https://raw.githubusercontent.com/GiomarMC/UNSA-GRAFOS/main/IngresantesCC_UNSA.csv")
 print(datos)
 Nodo = datos[['PUNTAJE','ANIO']]
 print(Nodo)
