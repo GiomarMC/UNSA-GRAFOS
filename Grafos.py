@@ -3,30 +3,28 @@ import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
 
-def addnodesandedges(G,n,p,y): #Se pasa el grafo, la cantidad de filas de dataframe por cada año, DataFrame filtrado por año, Nodo origen del grafo
-    G.add_node(y)#Nodo en el que se uniran los demas nodos creados del data frame
-    for i in range(0,n):
-        s = p.iloc[i,0] #con la funcion iloc y coordenadas busco los datos de cada persona como se muestra abajo
-        n = p.iloc[i,1]
-        c = p.iloc[i,2]
-        m = p.iloc[i,3]
-        a = p.iloc[i,4]
-        G.add_node(i, person = s, number = n, career = c, modality = m, year = a) #añado nodos con un valor i con atributos sacados del dataframe del año
-        G.add_edge(y,i) #rtambien de paso le creo una arista entre el nodo creado ahora jutno con el nodo que tiene el y-años
-        #print(G.nodes[i]) #se muestra el nodo creado con sus atributos
+def addnodesandedges(Grafo,numero,dataf,año): #Se pasa el Grafo, la cantidad de filas de dataframe por cada año, DataFrame filtrado por año, Nodo origen del grafo(año)
+    Grafo.add_node(año)#Nodo en el que se uniran los demas nodos creados del data frame
+    for i in range(0,numero): #Con la funcion iloc(funcion de pandas) y coordenadas se busca los datos de cada persona como se muestra abajo
+        persona = dataf.iloc[i,0]
+        numero = dataf.iloc[i,1]
+        carrera = dataf.iloc[i,2]
+        modalidad = dataf.iloc[i,3]
+        año = dataf.iloc[i,4]
+        Grafo.add_node(i, person = persona, number = numero, career = carrera, modality = modalidad, year = año) #Se crea el Nodo con los valores i(numero del nodo) con los datos de cada persona
+        Grafo.add_edge(año,i) #Se crea la arista que une al Nodo que contiene los datos de la persona con el Nodo del año
+        #Para mostrar el contenido del nodo se utiliza (print(G.nodes[nombre del nodo])
 
-
-def showsavefig(P,s): #se el da el grafo y el string del nombre de la imagen
-    nx.draw(P,with_labels=True) #dibujo la figura cmostranros los numero
-    plt.savefig(s) #la guardo en formanto prederminado como png
+def showsavefig(Grafo,NombreG): #Se entrega el grafo y el nombre como se guardara el grafo en extension png
+    nx.draw(Grafo, node_size = 10,with_labels = False) #Dibuja el grafo con las caracteristicas del nodo de tamaño 10 y no mostrara sus etiquetas
+    plt.axis("equal") #Dibujara al grafo mas ordenado
+    plt.savefig(NombreG) #Se guardara el grafo como imagen.png
 
 df = pd.read_csv("https://raw.githubusercontent.com/GiomarMC/UNSA-GRAFOS/main/IngresantesCC_UNSA.csv", index_col=["Nro"])
-Grafo = df
-print(Grafo)
-GrafoGeneral = nx.Graph()
 
-Graph2019 = df[ df["ANIO"] == 2019] #hago un dataframe del año 2019 y asi con los demas
-print(Graph2019 )
+#Se filtra el Data Frame separandolo por años de ingreso y se crea un grafo para esos datos
+Graph2019 = df[ df["ANIO"] == 2019]
+print(Graph2019)
 NGraph2019 = nx.Graph()
 
 Graph2020 = df[ df["ANIO"] == 2020]
@@ -45,23 +43,25 @@ Graph2023 = df[ df["ANIO"] == 2023]
 print(Graph2023)
 NGraph2023 = nx.Graph()
 
-print(len(Graph2019.index), len(Graph2020.index), len(Graph2021.index), len(Graph2022.index), len(Graph2023.index), len(Grafo.index)) #muestro la cantidad de numeros de cada áño
+#Se imprime la cantidad de personas por año
+print(len(Graph2019.index), len(Graph2020.index), len(Graph2021.index), len(Graph2022.index), len(Graph2023.index))
 
-addnodesandedges(NGraph2019, len(Graph2019.index), Graph2019, 2019) #funcion pa crear el grafo de un solo año asi los demas iguals
+#Se llama a la funcion que crea los nodos y las aristas
+addnodesandedges(NGraph2019, len(Graph2019.index), Graph2019, 2019)
 addnodesandedges(NGraph2020, len(Graph2020.index), Graph2020, 2020)
 addnodesandedges(NGraph2021, len(Graph2021.index), Graph2021, 2021)
-addnodesandedges(NGraph2022,len(Graph2022.index),Graph2022,2022)
+addnodesandedges(NGraph2022, len(Graph2022.index), Graph2022, 2022)
 addnodesandedges(NGraph2023, len(Graph2023.index), Graph2023, 2023)
-addnodesandedges(GrafoGeneral, len(Grafo.index), Grafo, 0)
 
-showsavefig(NGraph2019, "Grafo2019.png") #funcion para descargar la imagen del  grafo corresppodientre y cono nobmre y terminarcion de como quiero que sea el archo puede ser
-showsavefig(NGraph2020, "Grafo2020.png") # png, jpg, pdf, y otros mas
+#Se llama a la funcion que dibuja y guarda al grafo como imagen.png
+showsavefig(NGraph2019, "Grafo2019.png")
+showsavefig(NGraph2020, "Grafo2020.png")
 showsavefig(NGraph2021, "Grafo2021.png")
 showsavefig(NGraph2022, "Grafo2022.png")
 showsavefig(NGraph2023, "Grafo2023.png")
-showsavefig(GrafoGeneral, "Grafo_Oficial.png")
 
-print(NGraph2019.number_of_nodes()) #muestro los nodos de cada grafo para compara que este correspondiento al numero de filas  se tendria q restar -1
+#Imprime el numero de nodos que cada grafo
+print(NGraph2019.number_of_nodes())
 print(NGraph2020.number_of_nodes())
 print(NGraph2021.number_of_nodes())
 print(NGraph2022.number_of_nodes())
