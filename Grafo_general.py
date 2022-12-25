@@ -3,7 +3,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 def addnodesGeneral(Grafo,numero,dataf):#Se pasa el Grafo, la cantidad de filas de dataframe por cada año, DataFrame filtrado por año
-    Grafo.add_node("INICIO")
+    Grafo.add_node("INICIO")#Se crea Nodo origen del grafo general
     for i in range(0,numero):
         persona = dataf.iloc[i,0] #Con la funcion iloc(funcion de pandas) y coordenadas se busca los datos de cada persona como se muestra abajo
         carrera = dataf.iloc[i,2]
