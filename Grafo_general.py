@@ -3,6 +3,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 def addnodesGeneral(Grafo,numero,dataf):#Se pasa el Grafo, la cantidad de filas de dataframe por cada año, DataFrame filtrado por año
+    Grafo.add_node("INICIO")
     for i in range(0,numero):
         persona = dataf.iloc[i,0] #Con la funcion iloc(funcion de pandas) y coordenadas se busca los datos de cada persona como se muestra abajo
         carrera = dataf.iloc[i,2]
@@ -21,11 +22,11 @@ def addnodesGeneral(Grafo,numero,dataf):#Se pasa el Grafo, la cantidad de filas 
         elif año == 2023:
             Grafo.add_edge(2023,i)
     #Se unen los nodos de los años
-    Grafo.add_edge(2019,2020)
-    Grafo.add_edge(2020,2021)
-    Grafo.add_edge(2021,2022)
-    Grafo.add_edge(2022,2023)
-    Grafo.add_edge(2023,2019)
+    Grafo.add_edge(2019,"INICIO")
+    Grafo.add_edge(2020,"INICIO")
+    Grafo.add_edge(2021,"INICIO")
+    Grafo.add_edge(2022,"INICIO")
+    Grafo.add_edge(2023,"INICIO")
 
 def showsavefig(Grafo,NombreG): #Se entrega el grafo y el nombre como se guardara el grafo en extension png
     nx.draw(Grafo, node_size = 10,with_labels = False) #Dibuja el grafo con las caracteristicas del nodo de tamaño 10 y no mostrara sus etiquetas
