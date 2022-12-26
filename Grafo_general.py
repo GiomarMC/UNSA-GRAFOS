@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 
 def addnodesGeneral(Grafo,numero,dataf):#Se pasa el Grafo, la cantidad de filas de dataframe por cada año, DataFrame filtrado por año
     Grafo.add_node(numero, year = 0, modality = 'NULL', score = 0)#Se crea Nodo origen del grafo general
+    #Se crea nodos auxiliares para el grafo general con algunos atributos
     Grafo.add_node(numero + 1, year = 2019, modality = 'NULL', score = 0)
     Grafo.add_node(numero + 2, year = 2020, modality = 'NULL', score = 0)
     Grafo.add_node(numero + 3, year = 2021, modality = 'NULL', score = 0)
@@ -15,6 +16,7 @@ def addnodesGeneral(Grafo,numero,dataf):#Se pasa el Grafo, la cantidad de filas 
         carrera = dataf.iloc[i,2]
         modalidad = dataf.iloc[i,3]
         año = dataf.iloc[i,4]
+        #Se crea Nodo y se agrega los atributos
         Grafo.add_node(i, person = persona, score = puntaje, number = numero, career = carrera, modality = modalidad, year = año) #Se crea el Nodo con los valores i(numero del nodo) con los datos de cada persona
         #Para crear la aristas se crea un condicion para separarlos por años
         if año == 2019:
@@ -34,15 +36,20 @@ def addnodesGeneral(Grafo,numero,dataf):#Se pasa el Grafo, la cantidad de filas 
     Grafo.add_edge(numero + 4,numero)
     Grafo.add_edge(numero + 5,numero)
 
+#Se crean funciones para dibujar el Grafo con las coloraciones
+
+#Funcion para Dibujar el Grafo General sin coloraciones por atributos
 def showsavefig(Grafo, NombreG): #Se entrega el grafo y el nombre como se guardara el grafo en extension png      
     pos = nx.layout.fruchterman_reingold_layout(Grafo)
     nx.draw(Grafo, pos = pos, node_size = 10, with_labels = False) #Dibuja el grafo con las caracteristicas del nodo de tamaño 10 y no mostrara sus etiquetas
     plt.axis("equal") #Dibujara al grafo mas ordenado
     plt.savefig(NombreG) #Se guardara el grafo como imagen.png
 
+#Funcion para Dibujar el Grafo General con coloracion por año
 def showsavefigyear(Grafo, NombreG):
-    color_map = nx.get_node_attributes(Grafo, "year")
+    color_map = nx.get_node_attributes(Grafo, "year") #Se realiza una busqueda en los nodos por el atributo year
 
+    #Por medio del for se realiza una seleccion y se le otorga un color a la variable
     for key in color_map:
         if color_map[key] == 2019:
             color_map[key] = 'red'
@@ -57,12 +64,15 @@ def showsavefigyear(Grafo, NombreG):
         else:
             color_map[key] = 'green'
 
+    #En la variable year_color se le asigna el color al Nodo
     year_color = [color_map.get(node) for node in Grafo.nodes()]
+    #Se dibuja el Grafo con la coloracion respectiva
     pos = nx.layout.fruchterman_reingold_layout(Grafo)
     nx.draw(GrafoGeneral2, pos = pos, node_size = 10, node_color = year_color, with_labels = False)
     plt.axis("equal")
     plt.savefig(NombreG)
 
+#Funcion para Dibujar el Grafo General con coloracion por modalidad
 def showsavefigmodality(Grafo, NombreG):
     color_map = nx.get_node_attributes(Grafo, "modality")
 
@@ -86,6 +96,7 @@ def showsavefigmodality(Grafo, NombreG):
     plt.axis("equal")
     plt.savefig(NombreG)
 
+#Funcion para Dibujar el Grafo General con coloracion por puntaje
 def showsavefigscore(Grafo, NombreG, score):
     color_map = nx.get_node_attributes(Grafo, "score")
 
@@ -103,6 +114,7 @@ def showsavefigscore(Grafo, NombreG, score):
     plt.axis("equal")
     plt.savefig(NombreG)
 
+#Funcion de menu de opciones para llamar a las funciones de dibujo
 def Opciones(opcion):
     if opcion == 1:
         showsavefig(GrafoGeneral1, "Grafo_Oficial.png")
@@ -114,9 +126,10 @@ def Opciones(opcion):
         puntaje = int(input("Ingrese el puntaje a comparar(El nodo sera Rojo si es superior al puntaje, Amarillo si es inferior): "))
         showsavefigscore(GrafoGeneral4, "Grafo_score.png", puntaje)
 
+#Se lee el DataFrame del CSV
 df = pd.read_csv("https://raw.githubusercontent.com/GiomarMC/UNSA-GRAFOS/main/IngresantesCC_UNSA.csv", index_col=["Nro"])
 
-#Se crea un Grafo general de todos los datos del data frame
+#Se crea Grafos generales de todos los datos del data frame
 Grafo = df
 print(Grafo)
 GrafoGeneral1 = nx.Graph()
@@ -138,4 +151,4 @@ print(GrafoGeneral1.number_of_nodes())
 
 #Se llama a la funcion que dibujara y guardara el Grafo General como imagen.png por medio de un menu de opciones
 opcion = int(input("Eliga una opcion de dibujo de grafo \nopcion 1: Grafo General \nopcion 2: Grafo Coloreado por años \nopcion 3: Grafo Coloreado por modalidad \nopcion 4: Grafo Coloreado por puntaje \nopcion: "))
-Opciones(opcion)
+Opciones(opcion) #Se llama a la funcion del menu de opciones
