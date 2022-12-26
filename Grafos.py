@@ -16,7 +16,7 @@ def addnodesandedges(Grafo,numero,dataf,año): #Se pasa el Grafo, la cantidad de
         #Para mostrar el contenido del nodo se utiliza (print(G.nodes[nombre del nodo])
 
 def showsavefig(Grafo,NombreG): #Se entrega el grafo y el nombre como se guardara el grafo en extension png
-    nx.draw(Grafo, node_size = 10,with_labels = False) #Dibuja el grafo con las caracteristicas del nodo de tamaño 10 y no mostrara sus etiquetas
+    nx.draw(Grafo, node_size = 30,with_labels = False) #Dibuja el grafo con las caracteristicas del nodo de tamaño 10 y no mostrara sus etiquetas
     plt.axis("equal") #Dibujara al grafo mas ordenado
     plt.savefig(NombreG) #Se guardara el grafo como imagen.png
 
